@@ -4,12 +4,15 @@ import helmet from 'helmet';
 import * as dotenv from 'dotenv';
 import { CommonRoutesConfig } from './helpers/CommonRoutesConfig';
 import { UserRoutes } from './routes/userRouter';
+import DbConfig from './helpers/DbConfig';
 
 dotenv.config();
 
 if(!process.env.PORT) {
     process.exit(1);
 }
+
+DbConfig.connect(process.env.DB_CNN as string);
 
 const PORT: number = parseInt(process.env.PORT as string, 10);
 const app: Application = express();
