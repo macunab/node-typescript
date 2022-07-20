@@ -1,12 +1,37 @@
 import { Request, Response } from 'express';
+import UserModel from '../models/user';
 
 class UserController {
 
-    listAllUsers(req: Request, res: Response) {
-        res.status(200).json({
-            ok: true,
-            msg: 'get all users'
-        });
+    async createUser(req: Request, res: Response) {
+        try {
+            await UserModel.createUser(req.body);
+            res.status(200).json({
+                ok: true,
+                msg: 'user created successfully'
+            });
+        } catch(err) {
+            res.status(401).json({
+                ok: false,
+                msg: err
+            });
+        }
+    }
+
+    async listAllUsers(req: Request, res: Response) {
+        try {
+            const users = await UserModel.getUsers();
+            res.status(200).json({
+                ok: true,
+                msg: 'get all users',
+                users
+            });
+        } catch(err) {
+            res.status(400).json({
+                ok: false,
+                msg: err
+            });
+        }
     }
 
     listOneUserByID(req: Request, res: Response) {

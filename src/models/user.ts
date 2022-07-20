@@ -1,4 +1,5 @@
 import DbConfig from "../helpers/DbConfig";
+import { User } from "../interfaces/interfaces";
 
 class UserModel {
     Schema = DbConfig.getMongoose().Schema;
@@ -12,8 +13,15 @@ class UserModel {
         name: String
     });
     User = DbConfig.getMongoose().model('User', this.userSchema);
+    // get all users
     async getUsers() {
-        return this.User.find();
+        return await this.User.find();
+    }
+
+    // create one user
+    async createUser(user: User) {
+        const userDb = new this.User(user);
+        await userDb.save();
     }
 }
 export default new UserModel;

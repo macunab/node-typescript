@@ -10,6 +10,10 @@ export class UserRoutes extends CommonRoutesConfig {
     }
 
     configureRoutes(): Application {
+
+        // todo body validations
+        this.app.route('/users/create')
+            .post(userController.createUser);
         
         this.app.route('/users/:id')
             .all((req: Request, res: Response, next: NextFunction) => {
