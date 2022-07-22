@@ -23,5 +23,11 @@ class UserModel {
         const userDb = new this.User(user);
         await userDb.save();
     }
+
+    async getUserByEmailWithPassword(email: string) {
+        return await this.User.findOne({ email: email })
+            .select('_id email name +password')
+            .exec();
+    }
 }
 export default new UserModel;
