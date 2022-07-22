@@ -1,10 +1,14 @@
 import { Request, Response } from 'express';
 import UserModel from '../models/user';
+import bcrypt from 'bcryptjs';
 
 class UserController {
 
     async createUser(req: Request, res: Response) {
         try {
+            const { password } = req.body;
+            const salt = bcrypt.genSaltSync();
+            req.body.password = bcrypt.hashSync(password, salt);
             await UserModel.createUser(req.body);
             res.status(200).json({
                 ok: true,

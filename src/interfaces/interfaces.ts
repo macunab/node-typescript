@@ -4,3 +4,9 @@ export interface User {
     password: string,
     name: string
 }
+
+export interface JWTParams {
+    id:string;
+    email: string;
+    name: string;
+}
