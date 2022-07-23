@@ -2,6 +2,7 @@ import { Application, NextFunction, Request, Response } from "express";
 import { check } from "express-validator";
 import userController from "../controllers/userController";
 import { CommonRoutesConfig } from "../helpers/CommonRoutesConfig";
+import jwtMiddleware from "../middlewares/jwt.middleware";
 import validationFields from "../middlewares/validationFields";
 
 
@@ -13,7 +14,12 @@ export class UserRoutes extends CommonRoutesConfig {
 
     configureRoutes(): Application {
 
-        // todo body validations
+        // list all user route
+        this.app.route('/users')
+            .get(jwtMiddleware.validateJwt,
+                userController.listAllUsers)
+
+        // create a user route
         this.app.route('/users/create')
             .post(
                 check('name', 'name is required').not().isEmpty(),
@@ -23,11 +29,13 @@ export class UserRoutes extends CommonRoutesConfig {
                 validationFields.verifyFieldsErrors,    
                 userController.createUser);
         
+        // get-update-delete one user from same route
         this.app.route('/users/:id')
             .all((req: Request, res: Response, next: NextFunction) => {
                 next();
             })
-            .get(userController.listOneUserByID)
+            .get(jwtMiddleware.validateJwt,
+                userController.listOneUserByID)
             .put(userController.updateUserByID)
             .delete(userController.deleteUserByID)
         return this.app;

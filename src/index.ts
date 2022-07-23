@@ -1,16 +1,15 @@
+import dotenv from 'dotenv';
+const dotenvResult = dotenv.config();
+if (dotenvResult.error) {
+    throw dotenvResult.error;
+}
 import express, { Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import * as dotenv from 'dotenv';
 import { CommonRoutesConfig } from './helpers/CommonRoutesConfig';
 import { UserRoutes } from './routes/userRouter';
 import DbConfig from './helpers/DbConfig';
-
-dotenv.config();
-
-if(!process.env.PORT) {
-    process.exit(1);
-}
+import { AuthRoute } from './routes/auth.route';
 
 DbConfig.connect(process.env.DB_CNN as string);
 
@@ -23,6 +22,7 @@ app.use(cors());
 app.use(express.json());
 
 routes.push(new UserRoutes(app));
+routes.push(new AuthRoute(app));
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);

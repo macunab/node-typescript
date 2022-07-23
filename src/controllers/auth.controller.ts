@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 
 const jwtSecret: string = process.env.JWT_SECRET!;
 const tokenExpiration = 36000;
+console.log('JWT SECRET: ' +jwtSecret);
 class AuthController {
     async createJWT(req: Request, res: Response) {
         try {
